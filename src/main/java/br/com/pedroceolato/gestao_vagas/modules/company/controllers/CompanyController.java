@@ -1,0 +1,33 @@
+package br.com.pedroceolato.gestao_vagas.modules.company.controllers;
+
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import br.com.pedroceolato.gestao_vagas.modules.company.entities.CompanyEntity;
+import br.com.pedroceolato.gestao_vagas.modules.company.useCases.CreateCompanyUseCase;
+import jakarta.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+
+@RestController
+@RequestMapping("/company")
+public class CompanyController {
+    @Autowired
+    private CreateCompanyUseCase createCompanyUseCase;
+
+    @PostMapping("/")
+    public ResponseEntity<Object> create(@Valid @RequestBody CompanyEntity companyEntity) {
+        try {
+            var company = this.createCompanyUseCase.execute(companyEntity);
+
+            return ResponseEntity.ok(company);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+    
+}
